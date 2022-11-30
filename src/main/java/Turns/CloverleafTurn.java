@@ -13,9 +13,4 @@ public final class CloverleafTurn extends AbstractTurn{
     void tuttoPoints(TurnResult tr) {
         tr.setCloverleaf(tr.getCloverleaf() + 1);
     }
-
-    @Override
-    protected boolean rollAgain() {
-        return true;
-    }
 }

@@ -42,7 +42,11 @@ public final class Deck {
         }
         AbstractCard card = this.deck.remove(0);
         this.drawnCards.add(card);
-        System.out.println("||A " + card.getClass().getSimpleName() + " was drawn||\n");
+        if (card instanceof BonusCard) {
+            int b = ((BonusCard) card).bonus;
+            System.out.println("\n||A " + card.getClass().getSimpleName() + " (" + b + ") was drawn||\n");
+        }
+        else {System.out.println("\n||A " + card.getClass().getSimpleName() + " was drawn||\n");}
         return card;
     }
 }

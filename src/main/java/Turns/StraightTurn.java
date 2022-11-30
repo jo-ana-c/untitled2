@@ -1,9 +1,7 @@
 package Turns;
 import java.util.ArrayList;
 import java.util.Scanner;
-
-import DicePackage.*;
-import DiePackage.*;
+import DiePackage.Die;
 import TurnResults.TurnResult;
 
 public final class StraightTurn extends AbstractTurn {
@@ -39,7 +37,6 @@ public final class StraightTurn extends AbstractTurn {
 
     @Override
     void selectDice() {
-        //ArrayList<Integer> possibleDice = new ArrayList<>();
         ArrayList<Integer> selectedDice = new ArrayList<>();
 
         boolean anyDiceSelected = false;
@@ -67,10 +64,5 @@ public final class StraightTurn extends AbstractTurn {
                 }
             }
         }
-    }
-
-    @Override
-    protected boolean rollAgain() {
-        return true;
     }
 }

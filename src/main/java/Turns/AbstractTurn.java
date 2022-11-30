@@ -22,10 +22,7 @@ public abstract class AbstractTurn {
 
         do {
             System.out.println("Let's roll the dice!...");
-            try {
-                Thread.sleep(2000);
-            }
-            catch (InterruptedException e) {e.printStackTrace();}
+            delay(2000);
             dice.rollDice();
             dice.displayDice();
             if (nullThrow()){
@@ -87,19 +84,18 @@ public abstract class AbstractTurn {
     // player selects triplets iteratively. method returns true if any triplet was selected
     boolean selectTriplets() {
         boolean selected = false;
-        boolean control = true;
 
-        while (control) {
+        while (true) {
             HashMap<Integer, Integer> occurrences = populateHashmap(this.dice);
             ArrayList<Integer> triplets = triplets(occurrences);
 
             if (!triplets.isEmpty()) {
-                System.out.print("You can select triplets for the following values: ");
+                System.out.print("You can select triplets for the following dice values: ");
                 for (int nr : triplets) {
                     System.out.print(nr + "   ");
                 }
                 System.out.println();
-                System.out.print("Would you like to select a triplet? If yes, enter its die value. If no, enter 0:");
+                System.out.print("Would you like to select a triplet? If yes, enter its die value. If no, enter 0: ");
 
                 int input = validateInput();
 
@@ -108,16 +104,28 @@ public abstract class AbstractTurn {
                     input = validateInput();
                 }
 
+
+
+
                 if (input != 0){
                     dice.selectTripleDice(input);
+                    System.out.println(tempPoints);
                     if (input == 1){this.tempPoints += 1000;}
                     else {this.tempPoints += input*100;}
                     selected = true;
+                    System.out.println(tempPoints);
                 }
-                else {control = false;}
+                else {break;}
             }
-            else {control = false;
-                System.out.println("There are no triplets to select.\n");}
+
+
+
+
+
+            else {
+                System.out.println("There are no triplets to select.\n");
+                break;
+            }
         }
         return selected;
     }
@@ -128,7 +136,6 @@ public abstract class AbstractTurn {
         boolean selected = false;
 
         HashMap<Integer, Integer> occurrences = populateHashmap(this.dice);
-
 
         if (occurrences.containsKey(value)) {
         System.out.println("You can select " + occurrences.get(value) +" x " + String.valueOf(value) + "s.");
@@ -141,7 +148,10 @@ public abstract class AbstractTurn {
                 number = validateInput();
             }
 
+            System.out.println(tempPoints);
+            System.out.println(number*points);
             tempPoints += number*points;
+            System.out.println(tempPoints);
 
             for (int i=0; i < number; i++){
                 for (Die d : dice){
@@ -203,15 +213,13 @@ public abstract class AbstractTurn {
         tr.setNewCard(false);
     }
 
-    protected boolean rollAgain() {
-        Scanner sc = new Scanner(System.in);
-        System.out.println("Would you like to roll the dice again?\nEnter R to roll again, E to end the turn:");
-        String input = sc.next();
-        while (!(input.equals("R") || input.equals("E"))){
-            System.out.println("Invalid input! Enter R to roll again or E to end the turn:");
-            input = sc.next();
-        }
-        return (input.equals("R"));
-    }
+    protected boolean rollAgain() {return true;}
     abstract void tuttoPoints(TurnResult tr);
+
+    protected void delay(int time){
+        try {
+            Thread.sleep(time);
+        }
+        catch (InterruptedException e) {e.printStackTrace();}
+    }
 }

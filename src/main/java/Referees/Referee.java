@@ -27,22 +27,16 @@ public final class Referee {
         while(onGoing()) {
 
             for (Entry<String, Integer> PlayerAtTurn: players.entrySet()){
-                System.out.println("*** It's " + PlayerAtTurn.getKey() + "'s turn! ***\n");
+                System.out.println("\n\n**************** It's " + PlayerAtTurn.getKey() + "'s turn! ****************\n");
                 askRollOrDisplay();
                 TurnResult tr = new TurnResult();
                 // While player is playing, reaching tutto and drawing a new card
-                boolean control = true;
-                while(control){
+
+                while(true){
                     AbstractCard drawnCard = deck.draw();
                     tr = drawnCard.initTurn(tr);
-                    if (!tr.getNewCard()){
-                        control = false;
-                    }
-                    else if (tr.getCloverleaf() != 2){
-                        if(askEndTurn()){
-                            break;
-                        }
-                    }
+                    if (!tr.getNewCard()){break;}
+                    else if (tr.getCloverleaf() != 2 && askEndTurn()){break;}
                 }
                 // if Cloverleaf and 2xTutto = Game finished and player won
                 if(tr.getCloverleaf() == 2){
@@ -151,8 +145,9 @@ public final class Referee {
     }
 
     public void displayPoints(){
+        System.out.println("SCOREBOARD:");
         for (Entry<String, Integer> FinalPoints: players.entrySet()){
-            System.out.print(FinalPoints.getKey() + ":" + FinalPoints.getValue() + " points." );
+            System.out.print(FinalPoints.getKey() + ": " + FinalPoints.getValue() + " points" );
             System.out.println();
         }
 

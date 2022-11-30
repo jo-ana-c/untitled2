@@ -36,6 +36,7 @@ public final class FireworkTurn extends AbstractTurn{
                 for (int value : triplets){
                     dice.selectTripleDice(value);
                     System.out.println("You rolled a triplet of " + String.valueOf(value) + "s!\n");
+                    delay(2000);
                     if (value == 1){this.tempPoints += 1000;}
                     else {this.tempPoints += value*100;}
                     selected = true;
@@ -61,13 +62,9 @@ public final class FireworkTurn extends AbstractTurn{
                     }
                 }
             }
-            System.out.println("You rolled " + occurrences.get(value) + " x " + value + "s!");
+            System.out.println("You rolled " + occurrences.get(value) + " x " + value + "s!\n");
+            delay(2000);
         }
         return selected;
-    }
-
-    @Override
-    protected boolean rollAgain() {
-        return true;
     }
 }
