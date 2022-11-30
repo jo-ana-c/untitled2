@@ -8,7 +8,7 @@ public final class Deck {
     private ArrayList<AbstractCard> drawnCards = new ArrayList<>(56);
 
     public Deck() {
-        this.deck.add(new CloverleafCard());
+        //this.deck.add(new CloverleafCard());
         for (int i = 0; i < 5; i++) {
             this.deck.add(new FireworkCard());
             this.deck.add(new StraightCard());

@@ -9,7 +9,8 @@ public final class PlusMinusTurn extends AbstractTurn{
     };
 
     @Override
-    void tuttoPoints(TurnResult tr) {
+    protected void tuttoPoints(TurnResult tr) {
         tr.setPlusMinus(tr.getPlusMinus() + 1);
+        tr.setNewCard(true);
     }
 }

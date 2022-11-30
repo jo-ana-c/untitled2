@@ -27,7 +27,7 @@ public final class Referee {
         while(onGoing()) {
 
             for (Entry<String, Integer> PlayerAtTurn: players.entrySet()){
-                System.out.println("\n\n**************** It's " + PlayerAtTurn.getKey() + "'s turn! ****************\n");
+                System.out.println("\n******************* It's " + PlayerAtTurn.getKey() + "'s turn! *******************\n");
                 askRollOrDisplay();
                 TurnResult tr = new TurnResult();
                 // While player is playing, reaching tutto and drawing a new card
@@ -36,7 +36,7 @@ public final class Referee {
                     AbstractCard drawnCard = deck.draw();
                     tr = drawnCard.initTurn(tr);
                     if (!tr.getNewCard()){break;}
-                    else if (tr.getCloverleaf() != 2 && askEndTurn()){break;}
+                    else if (tr.getCloverleaf() != 2 && askEndTurn()) {break;}
                 }
                 // if Cloverleaf and 2xTutto = Game finished and player won
                 if(tr.getCloverleaf() == 2){
@@ -46,15 +46,15 @@ public final class Referee {
                 }
 
                 // if plusminus was drawn and player at turn is not leading, apply minus rule to leading players
-                if(tr.getPlusMinus() > 0 && !getLeadingPlayers().contains(PlayerAtTurn.getKey())){
-                    for (Entry<String, Integer> leadingEntry: players.entrySet()){
-                        if (getLeadingPlayers().contains(leadingEntry.getKey())){
-                            players.put(leadingEntry.getKey(), leadingEntry.getValue()-(tr.getPlusMinus()*1000));
+                if (tr.getPlusMinus() > 0) {
+                    for (String player : getLeadingPlayers()) {
+                        if (!player.equals(PlayerAtTurn.getKey())) {
+                            players.put(player, players.get(player)-(tr.getPlusMinus()*1000));
                         }
-
+                        else {
+                            players.put(player, players.get(player)+(tr.getPlusMinus()*1000));
+                        }
                     }
-                    // receive 1000 * times PlusminusCard Drawn for player at turn
-                    players.put(PlayerAtTurn.getKey(), PlayerAtTurn.getValue()+(tr.getPlusMinus()*1000));
                 }
                 // receive points reached with other cards
                 players.put(PlayerAtTurn.getKey(), PlayerAtTurn.getValue()+tr.getPoints());
@@ -81,7 +81,7 @@ public final class Referee {
             // display points and ask again
             displayPoints();
             System.out.println();
-            System.out.println("Would you still like to display the score or continue by rolling the dice?");
+            System.out.println("Would you still like to display (D) the score or continue by rolling (R) the dice?");
             // new Input Validation
             rodInput = askRollorDisplay.next();
             while(!inputValidation_RD(rodInput)){
@@ -92,33 +92,29 @@ public final class Referee {
     }
 
     public boolean askEndTurn(){
-        System.out.println("Would you like to end the turn or continue by rolling the dice again?");
-        System.out.println("Enter E to end the turn or R to roll the dice again.");
+        System.out.println("Would you like to end the turn or continue by drawing another card?");
+        System.out.println("Enter E to end the turn or D to draw another card.");
         Scanner askRollorEnd = new Scanner(System.in);
         String roeInput = askRollorEnd.next();
         // ask for Input and validate
-        while(!inputValidation_RE(roeInput)){
+        while(!inputValidation_ED(roeInput)){
             System.out.println("Invalid Input. Try again.");
             roeInput = askRollorEnd.next();
         }
         return (roeInput.equals("E"));
-
     }
 
     public boolean inputValidation_RD(String inputPlayer){
         return (inputPlayer.equals("D") || inputPlayer.equals("R"));}
 
-    public boolean inputValidation_RE(String inputPlayer){
-        return (inputPlayer.equals("E") || inputPlayer.equals("R"));}
+    public boolean inputValidation_ED(String inputPlayer){
+        return (inputPlayer.equals("E") || inputPlayer.equals("D"));}
 
 
 
     public boolean onGoing(){
         return (Collections.max(players.values()) < this.maxScore);
     }
-    //public void initTurn(){}
-
-    //public void updatePlayerScore(String PlayerAtTurn, TurnResult tr){}
 
     public ArrayList<String> getLeadingPlayers(){
 
@@ -136,8 +132,6 @@ public final class Referee {
         }
         return leadingPlayers;
     }
-    //Fields: tempScores; Deck; Hashmap (Name, Points)
-    //Methods: initTurn(); updatePlayerScore(); getLeadingPlayer(); getMaxPoints();
 
     public void declareWinner(String Winner){
         System.out.println(Winner + "won the game!");
@@ -145,7 +139,7 @@ public final class Referee {
     }
 
     public void displayPoints(){
-        System.out.println("SCOREBOARD:");
+        System.out.println("SCOREBOARD");
         for (Entry<String, Integer> FinalPoints: players.entrySet()){
             System.out.print(FinalPoints.getKey() + ": " + FinalPoints.getValue() + " points" );
             System.out.println();

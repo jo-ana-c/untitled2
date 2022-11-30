@@ -13,7 +13,7 @@ public final class Game {
     private Referee referee;
 
     public Game() {
-        System.out.println("Let's play Tutto!");
+        System.out.println("LET'S PLAY A GAME OF TUTTO!\n");
         this.numPlayers = setNumPlayers();
         this.names = new ArrayList<>(this.numPlayers);
         this.maxPoints = setMaxScore();
@@ -42,24 +42,6 @@ public final class Game {
             System.out.println("Input must be a single digit between 2 and 4.");
             return setNumPlayers();
         }
-        /*Scanner scannerNumPlayers = new Scanner(System.in);
-        System.out.println("How many Players (2-4) are playing? ");
-
-        int numPlayersInput;
-        do {
-            try {
-                numPlayersInput = scannerNumPlayers.nextInt();
-
-                while (numPlayersInput < 2 || numPlayersInput > 4) {
-                    System.out.println("Input must be a single digit between 2 and 4!");
-                    scannerNumPlayers.nextInt();
-                }
-                return numPlayersInput;}
-            catch (InputMismatchException err) {
-                System.out.println("Wrong input format!");
-                return setNumPlayers();
-            }
-        } while (!scannerNumPlayers.hasNextInt()); */
     }
 
     private int setMaxScore() {

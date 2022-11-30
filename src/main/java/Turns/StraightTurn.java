@@ -27,16 +27,18 @@ public final class StraightTurn extends AbstractTurn {
                 return false;
             }
         }
+        System.out.println("NULL!\n");
         return true;
     }
 
     @Override
-    void tuttoPoints(TurnResult tr) {
+    protected void tuttoPoints(TurnResult tr) {
         tr.setPoints(tr.getPoints() + 2000);
+        tr.setNewCard(true);
     }
 
     @Override
-    void selectDice() {
+    protected void selectDice() {
         ArrayList<Integer> selectedDice = new ArrayList<>();
 
         boolean anyDiceSelected = false;

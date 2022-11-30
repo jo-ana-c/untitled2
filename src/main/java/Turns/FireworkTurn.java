@@ -5,7 +5,6 @@ import TurnResults.TurnResult;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Scanner;
 
 public final class FireworkTurn extends AbstractTurn{
 
@@ -20,12 +19,12 @@ public final class FireworkTurn extends AbstractTurn{
     }
 
     @Override
-    void tuttoPoints(TurnResult tr) {
-        return;
+    protected void tuttoPoints(TurnResult tr) {
+        tr.setFirework(true);
     }
 
     @Override
-    boolean selectTriplets() {
+    protected boolean selectTriplets() {
         boolean selected = false;
 
         while (!selected) {
@@ -34,7 +33,7 @@ public final class FireworkTurn extends AbstractTurn{
 
             if (!triplets.isEmpty()) {
                 for (int value : triplets){
-                    dice.selectTripleDice(value);
+                    this.dice.selectTripleDice(value);
                     System.out.println("You rolled a triplet of " + String.valueOf(value) + "s!\n");
                     delay(2000);
                     if (value == 1){this.tempPoints += 1000;}
@@ -48,7 +47,7 @@ public final class FireworkTurn extends AbstractTurn{
    }
 
     @Override
-    boolean selectSingles(int value, int points) {
+    protected boolean selectSingles(int value, int points) {
         boolean selected = false;
         HashMap<Integer, Integer> occurrences = populateHashmap(this.dice);
         if (occurrences.containsKey(value)) {

@@ -71,15 +71,19 @@ public final class Dice implements Iterable<Die>{
 
     public void selectSingleDice(int value){
         for (Die d : dice) {
-            if (d.getValue() == value) {d.select();break;}
+            if (d.getValue() == value) {
+                d.select();
+                break;
+            }
         }
     }
 
     public void selectTripleDice(int value){
         int counter = 0;
-        for (Die d : dice) {
-            if (d.getValue() == value) {
-                d.select(); counter += 1;
+        for (Die d : this.dice) {
+            if (!d.isSelected() && d.getValue() == value) {
+                d.select();
+                counter += 1;
                 if (counter == 3){break;}
             }
         }
