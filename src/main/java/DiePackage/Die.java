@@ -1,8 +1,10 @@
 package DiePackage;
 import java.util.Random;
 
+// final gelöscht
 public final class Die {
     private boolean selected = false;
+    // protected statt private
     private int value;
 
     public void rollDie(){

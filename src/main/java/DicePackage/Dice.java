@@ -4,7 +4,10 @@ import DiePackage.Die;
 import java.util.*;
 import java.lang.Iterable;
 
+// final gelöscht
 public final class Dice implements Iterable<Die>{
+
+    // protected statt private in dice
     private ArrayList<Die> dice = new ArrayList<>(6);
     public Dice() {
         for (int i = 0; i < 6; i++) {
