@@ -29,7 +29,7 @@ public final class Referee {
     private void gameFlow(){
         while(onGoing()) {
 
-            for (Entry<String, Integer> PlayerAtTurn: players.entrySet()){
+            for (Entry <String, Integer> PlayerAtTurn: players.entrySet()){
                 System.out.println("\n******************* It's " + PlayerAtTurn.getKey() + "'s turn! *******************\n");
                 askRollOrDisplay();
                 TurnResult tr = new TurnResult();
@@ -71,7 +71,7 @@ public final class Referee {
         }
     }
 
-    private boolean askEndTurn(){
+    private boolean askEndTurn() {
         System.out.println("Would you like to end the turn or continue by drawing another card?");
         System.out.println("Enter E to end the turn or D to draw another card.");
         String input = inputObject.inputValidation_ED(inputObject.askStringInput());

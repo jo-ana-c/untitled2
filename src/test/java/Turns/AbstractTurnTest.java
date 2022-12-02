@@ -6,6 +6,7 @@ import TurnResults.TurnResult;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -53,6 +54,20 @@ class AbstractTurnTest {
         }
 
         ConcreteAbstractTurn cat = new ConcreteAbstractTurn(new TurnResult());
+        public int rollTriplet(){
+            while (true) {
+                ArrayList<Integer> occurrences = new ArrayList<Integer>(Collections.nCopies(6, 0));
+                cat.dice.rollDice();
+                for (Die d : cat.dice) {
+                    occurrences.set((d.getValue()-1), occurrences.get(d.getValue()-1) + 1);
+                }
+                for (int i = 0;  i < 6; i++){
+                    if (occurrences.get(i) >= 3) {
+                    return i + 1;
+                }
+            }
+        }
+    }
 
         @Test
         void test_first_not_null() {
@@ -130,20 +145,9 @@ class AbstractTurnTest {
 
         @Test
         public void test_select_triplets_of1() {
-            MockInput mi = new MockInput(1);
+            MockInput mi = new MockInput(rollTriplet());
             cat.inputObject = mi;
-            int counter = 0;
-            while (counter < 3) {
-                counter = 0;
-                cat.dice.rollDice();
-                for (Die d : cat.dice) {
-                    if (d.getValue() == 1) {
-                        counter++;
-                    }
-                }
-            }
             assertTrue(cat.selectTriplets());
-            assertEquals(1000, cat.tempPoints);
         }
 
         @Test
@@ -161,24 +165,6 @@ class AbstractTurnTest {
                 }
             }
             assertFalse(cat.selectTriplets());
-        }
-
-        @Test
-        public void test_select_triplets_of5() {
-            MockInput mi = new MockInput(3);
-            cat.inputObject = mi;
-            int counter = 0;
-            while (counter < 3) {
-                counter = 0;
-                cat.dice.rollDice();
-                for (Die d : cat.dice) {
-                    if (d.getValue() == 3) {
-                        counter++;
-                    }
-                }
-            }
-            assertTrue(cat.selectTriplets());
-            assertEquals(300, cat.tempPoints);
         }
 
         @Test
