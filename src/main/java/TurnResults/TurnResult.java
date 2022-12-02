@@ -37,4 +37,8 @@ public final class TurnResult {
     public boolean getNewCard(){
         return this.newCard;
     }
+
+    public boolean cloverleafWon() {
+        return this.cloverleaf == 2;
+    }
 }

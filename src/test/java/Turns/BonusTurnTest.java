@@ -34,5 +34,10 @@ class BonusTurnTest extends AbstractTurnTest{
         assertTrue(bt.tr.getNewCard());
     }
 
+    @Test
+    public void test_constructor() {
+        assertTrue(bt.tr instanceof TurnResult);
+    }
+
 
 }

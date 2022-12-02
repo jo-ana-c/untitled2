@@ -88,6 +88,19 @@ class FireworkTurnTest {
             assertEquals(0, tr.getCloverleaf());
             assertEquals(false, tr.getNewCard());
     }
+
+    @Test
+    public void test_tuttoPoints_sets_true() {
+        assertFalse(ft.tr.getFirework());
+        ft.tuttoPoints(ft.tr);
+        assertTrue(ft.tr.getFirework());
+    }
+
+    @Test
+    public void test_constructor() {
+        assertTrue(ft.tr instanceof TurnResult);
+    }
+
 }
 
 

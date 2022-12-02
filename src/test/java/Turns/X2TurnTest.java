@@ -33,4 +33,10 @@ class X2TurnTest extends AbstractTurnTest{
         assertTrue(x2.tr.getNewCard());
     }
 
+    @Test
+    public void test_constructor() {
+        assertTrue(x2.tr instanceof TurnResult);
+    }
+
+
 }

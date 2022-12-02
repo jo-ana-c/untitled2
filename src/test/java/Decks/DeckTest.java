@@ -1,16 +1,15 @@
 package Decks;
 
+import Cards.AbstractCard;
 import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class DeckTest {
     Deck deck = new Deck();
 
     @Test
     void returnsCard() {
-        for (int i = 0; i < 55; i++) {
-            deck.draw();
-        }
-
+        assertTrue(deck.draw() instanceof AbstractCard);
     }
-
 }

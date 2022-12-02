@@ -1,6 +1,6 @@
 package Inputs;
 
-import java.util.ArrayList;
+import java.util.TreeMap;
 
 public abstract class AbstractInput {
 
@@ -56,12 +56,10 @@ public abstract class AbstractInput {
         return input;
     }
 
-    public String inputValidation_Players(String input, ArrayList<String> array) {
-        for (String x : array) {
-            if (x.equals(input)) {
-                System.out.println("Username taken! Please choose another one.");
-                return inputValidation_Players(askStringInput(), array);
-            }
+    public String inputValidation_Players(String input, TreeMap<String, Integer> array) {
+        if (array.containsKey(input)) {
+            System.out.println("Username taken! Please choose another one.");
+            return inputValidation_Players(askStringInput(), array);
         }
         return input;
     }

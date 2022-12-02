@@ -39,4 +39,10 @@ class StraightTurnTest extends AbstractTurnTest{
         assertEquals(1,selected);
     }
 
+    @Test
+    public void test_constructor() {
+        assertTrue(st.tr instanceof TurnResult);
+    }
+
+
 }

@@ -17,4 +17,10 @@ class PlusMinusTurnTest extends AbstractTurnTest{
         assertTrue(pm.tr.getNewCard());
     }
 
+    @Test
+    public void test_constructor() {
+        assertTrue(pm.tr instanceof TurnResult);
+    }
+
+
 }
