@@ -5,8 +5,10 @@ import Inputs.AbstractInput;
 import TurnResults.TurnResult;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
+import java.util.ArrayList;
+import java.util.HashMap;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 class AbstractTurnTest {
 
@@ -28,94 +30,216 @@ class AbstractTurnTest {
                 return "E";
             } else if (mockInput == 2) {
                 return "D";
-            } else {
+            } else if (mockInput == 3) {
                 return "R";
+            } else if (mockInput == 4) {
+                return "Y";
+            } else if (mockInput == 5) {
+                return "N";
+            }
+            return "Z";
+        }
+    }
+        class ConcreteAbstractTurn extends AbstractTurn {
+
+            protected ConcreteAbstractTurn(TurnResult tr) {
+                super(tr);
+            }
+
+            @Override
+            void tuttoPoints(TurnResult tr) {
+                return;
             }
         }
-    }
 
-    class ConcreteAbstractTurn extends AbstractTurn {
+        ConcreteAbstractTurn cat = new ConcreteAbstractTurn(new TurnResult());
 
-        protected ConcreteAbstractTurn(TurnResult tr) {
-            super(tr);
+        @Test
+        void test_first_not_null() {
+            assertFalse(cat.nullThrow());
         }
 
-        @Override
-        void tuttoPoints(TurnResult tr) {
-            return;
+        @Test
+        void test_roll_untill_one() {
+            boolean control = true;
+            while (control) {
+                cat.dice.rollDice();
+                for (Die d : cat.dice) {
+                    if (d.getValue() == 1 || d.getValue() == 5) {
+                        control = false;
+                        break;
+                    }
+                }
+            }
+            assertFalse(cat.nullThrow());
         }
-    }
 
-    ConcreteAbstractTurn cat = new ConcreteAbstractTurn(new TurnResult());
+        @Test
+        void test_is_nullThrow() {
+            int counter = 0;
+            while (counter < 5) {
+                for (Die d : cat.dice) {
+                    if (!d.isSelected()) {
+                        d.select();
+                        counter++;
+                        break;
+                    }
+                }
+            }
+            assertTrue(cat.nullThrow());
+        }
 
-    @Test
-    void test_first_not_null(){
-        assertFalse(cat.nullThrow());
-    }
+        @Test
+        void test_hashmap() {
+            HashMap<Integer, Integer> hm = cat.populateHashmap(cat.dice);
+            assertEquals(((HashMap<Integer, Integer>) hm).get(0), 6);
+        }
 
-    @Test
-    void test_roll_untill_one(){
-        boolean control = true;
-        while(control) {
-            cat.dice.rollDice();
-            for (Die d : cat.dice) {
-                if (d.getValue() == 1 || d.getValue() == 5) {
-                    control = false;
-                    break;
+        @Test
+        void test_there_are_triplets() {
+            ArrayList<Integer> triplets = cat.triplets(cat.populateHashmap(cat.dice));
+            assertTrue(((ArrayList<Integer>) triplets).contains(0));
+        }
+
+        @Test
+        void test_template_null() {
+            for (int i = 0; i < 6; i++) {
+                cat.dice.selectSingleDice(0);
+            }
+
+            TurnResult tr1 = cat.templateTurn();
+            assertEquals(0, tr1.getPoints());
+            assertEquals(0, tr1.getPlusMinus());
+            assertEquals(0, tr1.getCloverleaf());
+            assertEquals(false, tr1.getNewCard());
+        }
+
+        @Test
+        public void select_singles_with_input() {
+            boolean control = true;
+            while (control) {
+                cat.dice.rollDice();
+                for (Die d : cat.dice) {
+                    if (d.getValue() == 1) {
+                        control = false;
+                        break;
+                    }
                 }
             }
         }
-        assertFalse(cat.nullThrow());
+
+        @Test
+        public void test_select_triplets_of1() {
+            MockInput mi = new MockInput(1);
+            cat.inputObject = mi;
+            int counter = 0;
+            while (counter < 3) {
+                counter = 0;
+                cat.dice.rollDice();
+                for (Die d : cat.dice) {
+                    if (d.getValue() == 1) {
+                        counter++;
+                    }
+                }
+            }
+            assertTrue(cat.selectTriplets());
+            assertEquals(1000, cat.tempPoints);
+        }
+
+        @Test
+        public void test_dont_select_triplets() {
+            MockInput mi = new MockInput(0);
+            cat.inputObject = mi;
+            int counter = 0;
+            while (counter < 3) {
+                counter = 0;
+                cat.dice.rollDice();
+                for (Die d : cat.dice) {
+                    if (d.getValue() == 1) {
+                        counter++;
+                    }
+                }
+            }
+            assertFalse(cat.selectTriplets());
+        }
+
+        @Test
+        public void test_select_triplets_of5() {
+            MockInput mi = new MockInput(3);
+            cat.inputObject = mi;
+            int counter = 0;
+            while (counter < 3) {
+                counter = 0;
+                cat.dice.rollDice();
+                for (Die d : cat.dice) {
+                    if (d.getValue() == 3) {
+                        counter++;
+                    }
+                }
+            }
+            assertTrue(cat.selectTriplets());
+            assertEquals(300, cat.tempPoints);
+        }
+
+        @Test
+        public void test_select_single1() {
+            MockInput mi = new MockInput(1);
+            cat.inputObject = mi;
+            int counter = 0;
+            while (counter < 1) {
+                counter = 0;
+                cat.dice.rollDice();
+                for (Die d : cat.dice) {
+                    if (d.getValue() == 1) {
+                        counter++;
+                    }
+                }
+            }
+            assertTrue(cat.selectSingles(1, 100));
+            assertEquals(100, cat.tempPoints);
+        }
+
+        @Test
+        public void test_no_ones_to_select() {
+            MockInput mi = new MockInput(1);
+            cat.inputObject = mi;
+            assertFalse(cat.selectSingles(1, 100));
+        }
+
+        @Test
+        public void test_choose_not_to_select_ones() {
+            MockInput mi = new MockInput(0);
+            cat.inputObject = mi;
+            int counter = 0;
+            while (counter < 1) {
+                counter = 0;
+                cat.dice.rollDice();
+                for (Die d : cat.dice) {
+                    if (d.getValue() == 1) {
+                        counter++;
+                    }
+                }
+            }
+            assertFalse(cat.selectSingles(1, 100));
+        }
+
+        @Test
+        public void test_trueRollAgain() {
+            assertTrue(cat.rollAgain());
+        }
+
+    /*@Test
+    public void test_IsTutto() {
+        assertFalse(cat.isTutto());
     }
 
-    /*@Test
-    void test_hashmap(){
-        HashMap<Integer, Integer> hm = cat.populateHashmap(cat.dice);
-        assertEquals(hm.get(0), 6);
-    }*/
-
-    /*@Test
-    public void test_IsTutto_And_Not() {
-        assertFalse(cat.isTutto());
+    @Test
+    public void test_IsNotTuto(){
         for (Die d : cat.dice) {
             d.select();
         }
         assertTrue(cat.isTutto());
     }*/
-
-    /*@Test
-    void test_there_are_triplets(){
-        ArrayList<Integer> triplets = cat.triplets(cat.populateHashmap(cat.dice));
-        assertTrue(triplets.contains(0));
-    }*/
-
-    @Test
-    void test_template_null() {
-        for (int i = 0; i < 6; i++) {
-            cat.dice.selectSingleDice(0);
-        }
-
-        TurnResult tr1 = cat.templateTurn();
-        assertEquals(0, tr1.getPoints());
-        assertEquals(0,tr1.getPlusMinus());
-        assertEquals(0, tr1.getCloverleaf());
-        assertEquals(false, tr1.getNewCard());
-    }
-
-    @Test
-    public void select_singles_with_input() {
-        boolean control = true;
-        while(control) {
-            cat.dice.rollDice();
-            for (Die d : cat.dice) {
-                if (d.getValue() == 1) {
-                    control = false;
-                    break;
-                }
-            }
-        }
-    }
-
 
 
 }

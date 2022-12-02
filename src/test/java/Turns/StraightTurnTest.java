@@ -1,11 +1,12 @@
 package Turns;
 
+import DiePackage.Die;
 import TurnResults.TurnResult;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class StraightTurnTest {
+class StraightTurnTest extends AbstractTurnTest{
     StraightTurn st = new StraightTurn(new TurnResult());
 
     @Test
@@ -19,10 +20,23 @@ class StraightTurnTest {
         assertTrue(st.nullThrow());
     }
 
-    /*@Test
-    void test_select() {
+    @Test
+    public void test_tuttoPoints_straight() {
+        st.tuttoPoints(st.tr);
+        assertEquals(2000, st.tr.getPoints());
+        assertTrue(st.tr.getNewCard());
+    }
+
+    @Test
+    public void test_select_a_die(){
+        MockInput mi = new MockInput(4);
+        st.inputObject = mi;
         st.selectDice();
-        assertEquals(1,1);
-    }*/
+        int selected = 0;
+        for (Die d : st.dice) {
+            if(d.isSelected()){selected++;}
+        }
+        assertEquals(1,selected);
+    }
 
 }

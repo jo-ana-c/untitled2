@@ -114,7 +114,7 @@ public final class Referee {
     }
 
     private void declareWinner(String Winner){
-        System.out.println(Winner + "won the game!");
+        System.out.println(Winner + " won the game!");
         displayPoints();
     }
 

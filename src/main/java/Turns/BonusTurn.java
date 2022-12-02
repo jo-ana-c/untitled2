@@ -20,13 +20,8 @@ public final class BonusTurn extends AbstractTurn{
 
     @Override
     protected boolean rollAgain() {
-        Scanner sc = new Scanner(System.in);
         System.out.println("Would you like to roll the dice again? Enter R to roll again, E to end the turn:");
-        String input = sc.next();
-        while (!(input.equals("R") || input.equals("E"))){
-            System.out.println("Invalid input! Enter R to roll again or E to end the turn:");
-            input = sc.next();
-        }
+        String input = inputObject.inputValidation_ER(inputObject.askStringInput());
         tr.setNewCard(input.equals("R"));
         return (input.equals("R"));
     }
