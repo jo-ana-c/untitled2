@@ -1,16 +1,19 @@
 package Referees;
 
+import Cards.AbstractCard;
+import Decks.Deck;
+import Inputs.AbstractInput;
+import Inputs.Input;
+import TurnResults.TurnResult;
+
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Scanner;
-import java.util.TreeMap;
-import Decks.Deck;
 import java.util.Map.Entry;
-import Cards.*;
-import TurnResults.TurnResult;
+import java.util.TreeMap;
 
 public final class Referee {
 
+    protected AbstractInput inputObject = new Input();
     private final int maxScore;
     private final TreeMap<String, Integer> players = new TreeMap<>();
     private final Deck deck = new Deck();
@@ -23,7 +26,7 @@ public final class Referee {
         gameFlow();
     }
 
-    public void gameFlow(){
+    private void gameFlow(){
         while(onGoing()) {
 
             for (Entry<String, Integer> PlayerAtTurn: players.entrySet()){
@@ -67,56 +70,33 @@ public final class Referee {
 
         }
     }
-    public void askRollOrDisplay(){
+
+    private boolean askEndTurn(){
+        System.out.println("Would you like to end the turn or continue by drawing another card?");
+        System.out.println("Enter E to end the turn or D to draw another card.");
+        String input = inputObject.inputValidation_ED(inputObject.askStringInput());
+        return (input.equals("E"));
+    }
+
+    private void askRollOrDisplay(){
         System.out.println("Would you like to display the score or roll the dice?");
         System.out.println("Enter D for display or R for roll.");
-        Scanner askRollorDisplay = new Scanner(System.in);
-        String rodInput = askRollorDisplay.next();
-        // Input validation
-        while(!inputValidation_RD(rodInput)){
-            System.out.println("Invalid input. Try again.");
-            rodInput = askRollorDisplay.next();
-        }
-        while(rodInput.equals("D")){
+        String input = inputObject.inputValidation_RD(inputObject.askStringInput());
+        while(input.equals("D")){
             // display points and ask again
             displayPoints();
             System.out.println();
             System.out.println("Would you still like to display (D) the score or continue by rolling (R) the dice?");
             // new Input Validation
-            rodInput = askRollorDisplay.next();
-            while(!inputValidation_RD(rodInput)){
-                System.out.println("Invalid input. Try again.");
-                rodInput = askRollorDisplay.next();
-            }
+            input = inputObject.inputValidation_RD(inputObject.askStringInput());
         }
     }
 
-    public boolean askEndTurn(){
-        System.out.println("Would you like to end the turn or continue by drawing another card?");
-        System.out.println("Enter E to end the turn or D to draw another card.");
-        Scanner askRollorEnd = new Scanner(System.in);
-        String roeInput = askRollorEnd.next();
-        // ask for Input and validate
-        while(!inputValidation_ED(roeInput)){
-            System.out.println("Invalid Input. Try again.");
-            roeInput = askRollorEnd.next();
-        }
-        return (roeInput.equals("E"));
-    }
-
-    public boolean inputValidation_RD(String inputPlayer){
-        return (inputPlayer.equals("D") || inputPlayer.equals("R"));}
-
-    public boolean inputValidation_ED(String inputPlayer){
-        return (inputPlayer.equals("E") || inputPlayer.equals("D"));}
-
-
-
-    public boolean onGoing(){
+    private boolean onGoing(){
         return (Collections.max(players.values()) < this.maxScore);
     }
 
-    public ArrayList<String> getLeadingPlayers(){
+    private ArrayList<String> getLeadingPlayers(){
 
         // get maxScore
         int max = (Collections.max(players.values()));
@@ -133,12 +113,12 @@ public final class Referee {
         return leadingPlayers;
     }
 
-    public void declareWinner(String Winner){
+    private void declareWinner(String Winner){
         System.out.println(Winner + "won the game!");
         displayPoints();
     }
 
-    public void displayPoints(){
+    private void displayPoints(){
         System.out.println("SCOREBOARD");
         for (Entry<String, Integer> FinalPoints: players.entrySet()){
             System.out.print(FinalPoints.getKey() + ": " + FinalPoints.getValue() + " points" );
@@ -146,6 +126,5 @@ public final class Referee {
         }
 
     }
-
 
 }

@@ -1,14 +1,16 @@
 package Decks;
+
 import Cards.*;
-import java.util.Collections;
+
 import java.util.ArrayList;
+import java.util.Collections;
 
 public final class Deck {
     private ArrayList<AbstractCard> deck = new ArrayList<>(56);
     private ArrayList<AbstractCard> drawnCards = new ArrayList<>(56);
 
     public Deck() {
-        //this.deck.add(new CloverleafCard());
+        this.deck.add(new CloverleafCard());
         for (int i = 0; i < 5; i++) {
             this.deck.add(new FireworkCard());
             this.deck.add(new StraightCard());
@@ -26,11 +28,11 @@ public final class Deck {
         shuffle();
     }
 
-    public void shuffle() {
+    private void shuffle() {
         Collections.shuffle(this.deck);
     }
 
-    public boolean isEmpty() {
+    private boolean isEmpty() {
         return this.deck.size() == 0;
     }
 

@@ -1,6 +1,4 @@
 package Turns;
-
-import DiePackage.Die;
 import TurnResults.TurnResult;
 
 import java.util.ArrayList;
@@ -53,17 +51,11 @@ public final class FireworkTurn extends AbstractTurn{
         if (occurrences.containsKey(value)) {
             tempPoints += occurrences.get(value)*points;
             for (int i=0; i < occurrences.get(value); i++){
-                for (Die d : dice){
-                    if (!d.isSelected() && d.getValue() == value){
-                        d.select();
-                        selected = true;
-                        break;
-                    }
+                selected = dice.selectSingleDice(value);
                 }
             }
             System.out.println("You rolled " + occurrences.get(value) + " x " + value + "s!\n");
             delay(2000);
-        }
         return selected;
     }
 }

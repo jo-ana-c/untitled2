@@ -1,10 +1,8 @@
 package Turns;
 
 
-import DicePackage.Dice;
-import DiePackage.*;
 import TurnResults.TurnResult;
-import java.util.HashMap;
+
 import java.util.Scanner;
 
 public final class BonusTurn extends AbstractTurn{

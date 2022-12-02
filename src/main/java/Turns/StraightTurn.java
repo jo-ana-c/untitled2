@@ -1,8 +1,10 @@
 package Turns;
-import java.util.ArrayList;
-import java.util.Scanner;
+
 import DiePackage.Die;
 import TurnResults.TurnResult;
+
+import java.util.ArrayList;
+import java.util.Scanner;
 
 public final class StraightTurn extends AbstractTurn {
 

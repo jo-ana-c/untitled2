@@ -1,15 +1,16 @@
 package Turns;
-import DicePackage.*;
+
+import DicePackage.Dice;
+import DiePackage.Die;
+import Inputs.AbstractInput;
+import Inputs.Input;
 import TurnResults.TurnResult;
-import DiePackage.*;
 
-import java.util.InputMismatchException;
-import java.util.Scanner;
 import java.util.ArrayList;
-
 import java.util.HashMap;
 
 public abstract class AbstractTurn {
+    protected AbstractInput inputObject = new Input();
     protected Dice dice = new Dice();
     protected TurnResult tr;
     protected int tempPoints = 0;
@@ -34,7 +35,7 @@ public abstract class AbstractTurn {
                 System.out.println("TUTTO!\n");
                 tuttoPoints(tr); // modify TR after tutto
                 if (tr.getFirework() || tr.getCloverleaf() == 1) {
-                    this.dice = new Dice();
+                    dice = new Dice();
                     return templateTurn();
                 }
                 return tr;
@@ -96,11 +97,11 @@ public abstract class AbstractTurn {
                 System.out.println();
                 System.out.print("Would you like to select a triplet? If yes, enter its die value. If no, enter 0: ");
 
-                int input = validateInput();
+                int input = inputObject.askIntegerInput();
 
                 while (!triplets.contains(input) && input != 0) {
                     System.out.println("There is no triplet of value " + String.valueOf(input) + ".\nPlease enter a valid triplet value or a 0, in case you do not want to select one.");
-                    input = validateInput();
+                    input = inputObject.askIntegerInput();
                 }
                 if (input != 0){
                     dice.selectTripleDice(input);
@@ -131,25 +132,19 @@ public abstract class AbstractTurn {
         System.out.println("You can select " + occurrences.get(value) +" x " + String.valueOf(value) + "s.");
             System.out.println("How many do you want to select? In case you do not want to select any, enter 0.");
 
-            int number = validateInput();
+            int number = inputObject.askIntegerInput();
 
             while (number > occurrences.get(value) || number < 0) {
                 System.out.println("There are only " + occurrences.get(value) + " x " + String.valueOf(value) + "s.\n" + "Select a valid number: ");
-                number = validateInput();
+                number = inputObject.askIntegerInput();
             }
 
             tempPoints += number*points;
 
             for (int i=0; i < number; i++){
-                for (Die d : dice){
-                    if (!d.isSelected() && d.getValue() == value){
-                        d.select();
-                        selected = true;
-                        break;
+                selected = dice.selectSingleDice(value);
                     }
                 }
-            }
-        }
         return selected;
     }
 
@@ -170,17 +165,6 @@ public abstract class AbstractTurn {
             }
         }
         return occurrences;
-    }
-
-    private int validateInput() {
-        Scanner sc = new Scanner(System.in);
-        int number;
-        while (! sc.hasNextInt()) {
-            System.out.println("Input must be an integer.");
-            sc.next();
-        }
-        number = sc.nextInt();
-        return number;
     }
 
     // create list from hashmap: list contains die numbers that are triplets
