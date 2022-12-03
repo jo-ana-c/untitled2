@@ -39,10 +39,53 @@ class StraightTurnTest extends AbstractTurnTest{
         assertEquals(1,selected);
     }
 
+    /*@Test
+    public void test_dont_select_a_die(){
+        MockInput mi = new MockInput(5);
+        st.inputObject = mi;
+        st.selectDice();
+        int selected = 0;
+        for (Die d : st.dice) {
+            if(d.isSelected()){selected++;}
+        }
+        assertEquals(0,selected);
+    }*/
+
     @Test
     public void test_constructor() {
         assertTrue(st.tr instanceof TurnResult);
     }
+
+    @Test
+    public void test_select_one_twice(){
+        st.inputObject = new MockInput(4);
+        int counter = 0;
+        // select all dice but 2
+        for (Die d : st.dice) {
+            d.select();
+            counter++;
+            if (counter == 4) {
+                break;
+            }
+        }
+        int count1 = 0;
+        while (count1 < 2) {
+            count1 = 0;
+            st.dice.rollDice();
+            for (Die d : st.dice) {
+                if (d.getValue() == 1) {
+                    count1++;
+                }
+            }
+        }
+        st.selectDice();
+        int selected = 0;
+        for (Die d : st.dice) {
+            if(d.isSelected()){selected++;}
+        }
+        assertEquals(5,selected);
+    }
+
 
 
 }

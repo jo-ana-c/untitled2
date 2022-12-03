@@ -12,4 +12,11 @@ class DeckTest {
     void returnsCard() {
         assertTrue(deck.draw() instanceof AbstractCard);
     }
+
+    @Test
+    void test_shuffles_if_empty(){
+        for (int i = 0; i < 57; i++) {
+            deck.draw();
+        }
+    }
 }

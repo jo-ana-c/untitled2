@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class FireworkTurnTest {
+class FireworkTurnTest extends AbstractTurnTest{
     FireworkTurn ft = new FireworkTurn(new TurnResult());
 
     @Test
@@ -101,6 +101,20 @@ class FireworkTurnTest {
         assertTrue(ft.tr instanceof TurnResult);
     }
 
+    @Test
+    public void test_select_triplets_of1() {
+        int counter = 0;
+        while (counter < 3) {
+            counter = 0;
+            ft.dice.rollDice();
+            for (Die d : ft.dice) {
+                if (d.getValue() == 1) {
+                    counter++;
+                }
+            }
+        }
+        assertTrue(ft.selectTriplets());
+    }
 }
 
 
