@@ -6,7 +6,7 @@ public final class PlusMinusTurn extends AbstractTurn{
 
     public PlusMinusTurn (TurnResult tr) {
         super(tr);
-    };
+    }
 
     @Override
     protected void tuttoPoints(TurnResult tr) {

@@ -2,8 +2,6 @@ package Turns;
 
 import TurnResults.TurnResult;
 
-import java.util.Scanner;
-
 public final class X2Turn extends AbstractTurn{
 
     public X2Turn (TurnResult tr) {

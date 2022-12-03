@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 public final class Dice implements Iterable<Die>{
-    private ArrayList<Die> dice = new ArrayList<>(6);
+    private final ArrayList<Die> dice = new ArrayList<>(6);
     public Dice() {
         for (int i = 0; i < 6; i++) {
             this.dice.add(new Die());
@@ -30,12 +30,10 @@ public final class Dice implements Iterable<Die>{
         return iter;
     }
 
-    public Dice rollDice() {
+    public void rollDice() {
         for (Die d : dice) {
             if (! d.isSelected()) {d.rollDie();}
         }
-        //not sure if we need to return it
-        return this;
     }
 
     public void displayDice(){

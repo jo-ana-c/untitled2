@@ -2,7 +2,7 @@ package Games;
 import Cards.AbstractCard;
 import Decks.Deck;
 import Inputs.Input;
-import Referees.Referee;
+import Decisions.Decision;
 import TurnResults.TurnResult;
 
 import java.util.ArrayList;
@@ -12,24 +12,24 @@ import java.util.TreeMap;
 
 
 public class Game {
-    private final int numPlayers;
+    //private final int numPlayers;
     private final int maxPoints;
 
     private final TreeMap<String, Integer> players = new TreeMap<>();
 
     public Input inputObject = new Input();
 
-    private final Referee referee = new Referee();
+    //private final Decision decision = new Decision();
 
     private final Deck deck = new Deck();
 
     public Game() {
         System.out.println("LET'S PLAY A GAME OF TUTTO!\n");
         System.out.println("How many Players (2-4) are playing? ");
-        this.numPlayers = inputObject.inputValidation_NumPlayer(inputObject.askIntegerInput());
+        int numPlayers = inputObject.inputValidation_NumPlayer(inputObject.askIntegerInput());
         System.out.println("What is your maximum Score?");
         this.maxPoints = inputObject.inputValidation_MaxScore(inputObject.askIntegerInput());
-        for (int i = 0; i < this.numPlayers; i++) {
+        for (int i = 0; i < numPlayers; i++) {
             System.out.println("Please enter username of player " + (i+1) + ":");
             String nameInput = inputObject.inputValidation_Players(inputObject.askStringInput(), this.players);
             this.players.put(nameInput,0);}
@@ -40,7 +40,7 @@ public class Game {
 
             for (Map.Entry<String, Integer> PlayerAtTurn: players.entrySet()){
                 System.out.println("\n******************* It's " + PlayerAtTurn.getKey() + "'s turn! *******************\n");
-                while(referee.askRollOrDisplay()) {displayPoints();}
+                while(Decision.askRollOrDisplay()) {displayPoints();}
                 TurnResult tr = new TurnResult();
                 // While player is playing, reaching tutto and drawing a new card
 
@@ -48,7 +48,7 @@ public class Game {
                     AbstractCard drawnCard = deck.draw();
                     tr = drawnCard.initTurn(tr);
                     if (!tr.getNewCard()){break;}
-                    else if (tr.getCloverleaf() != 2 && referee.askEndTurn()) {break;}
+                    else if (tr.getCloverleaf() != 2 && Decision.askEndTurn()) {break;}
                 }
                 // if Cloverleaf and 2xTutto = Game finished and player won
                 if(tr.cloverleafWon()){

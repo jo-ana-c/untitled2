@@ -23,7 +23,7 @@ public abstract class AbstractTurn {
 
         do {
             System.out.println("Let's roll the dice!...");
-            delay(2000);
+            // delay(2000);
             dice.rollDice();
             dice.displayDice();
             if (nullThrow()){
@@ -100,7 +100,7 @@ public abstract class AbstractTurn {
                 int input = inputObject.askIntegerInput();
 
                 while (!triplets.contains(input) && input != 0) {
-                    System.out.println("There is no triplet of value " + String.valueOf(input) + ".\nPlease enter a valid triplet value or a 0, in case you do not want to select one.");
+                    System.out.println("There is no triplet of value " + input + ".\nPlease enter a valid triplet value or a 0, in case you do not want to select one.");
                     input = inputObject.askIntegerInput();
                 }
                 if (input != 0){
@@ -129,13 +129,13 @@ public abstract class AbstractTurn {
         HashMap<Integer, Integer> occurrences = populateHashmap(dice);
 
         if (occurrences.containsKey(value)) {
-        System.out.println("You can select " + occurrences.get(value) +" x " + String.valueOf(value) + "s.");
+        System.out.println("You can select " + occurrences.get(value) +" x " + value + "s.");
             System.out.println("How many do you want to select? In case you do not want to select any, enter 0.");
 
             int number = inputObject.askIntegerInput();
 
             while (number > occurrences.get(value) || number < 0) {
-                System.out.println("There are only " + occurrences.get(value) + " x " + String.valueOf(value) + "s.\n" + "Select a valid number: ");
+                System.out.println("There are only " + occurrences.get(value) + " x " + value + "s.\n" + "Select a valid number: ");
                 number = inputObject.askIntegerInput();
             }
 
@@ -158,7 +158,7 @@ public abstract class AbstractTurn {
 
     //fill hashmap: for all unselected dice, key = dice number, value = occurrences
     protected HashMap<Integer, Integer> populateHashmap(Dice dice){
-        HashMap<Integer, Integer> occurrences = new HashMap<Integer, Integer>();
+        HashMap<Integer, Integer> occurrences = new HashMap<>();
         for (Die d : dice){
             if (!d.isSelected() && !occurrences.containsKey(d.getValue())){
                 occurrences.put(d.getValue(), occurrencesCount(dice, d.getValue()));

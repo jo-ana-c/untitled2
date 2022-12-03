@@ -32,7 +32,7 @@ public final class FireworkTurn extends AbstractTurn{
             if (!triplets.isEmpty()) {
                 for (int value : triplets){
                     this.dice.selectTripleDice(value);
-                    System.out.println("You rolled a triplet of " + String.valueOf(value) + "s!\n");
+                    System.out.println("You rolled a triplet of " + value + "s!\n");
                     delay(2000);
                     if (value == 1){this.tempPoints += 1000;}
                     else {this.tempPoints += value*100;}

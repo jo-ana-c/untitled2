@@ -17,8 +17,7 @@ public class Input extends AbstractInput {
 
     public String askStringInput() {
         Scanner sc = new Scanner(System.in);
-        String input = sc.next();
-        return input;
+        return sc.next();
     }
 }
 

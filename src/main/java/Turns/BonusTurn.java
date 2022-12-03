@@ -3,10 +3,8 @@ package Turns;
 
 import TurnResults.TurnResult;
 
-import java.util.Scanner;
-
 public final class BonusTurn extends AbstractTurn{
-    private int bonus;
+    private final int bonus;
     public BonusTurn (TurnResult tr, int bonus) {
         super(tr);
         this.bonus = bonus;
