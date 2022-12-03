@@ -53,8 +53,9 @@ public final class FireworkTurn extends AbstractTurn{
             for (int i=0; i < occurrences.get(value); i++){
                 selected = dice.selectSingleDice(value);
                 }
-            }
             System.out.println("You rolled " + occurrences.get(value) + " x " + value + "s!\n");
+            }
+
             delay(2000);
         return selected;
     }
