@@ -63,10 +63,8 @@ public class Game {
                         if (!player.equals(PlayerAtTurn.getKey())) {
                             players.put(player, players.get(player)-(tr.getPlusMinus()*1000));
                         }
-                        else {
-                            players.put(player, players.get(player)+(tr.getPlusMinus()*1000));
-                        }
                     }
+                    players.put(PlayerAtTurn.getKey(), players.get(PlayerAtTurn.getKey())+(tr.getPlusMinus()*1000));
                 }
                 // receive points reached with other cards
                 players.put(PlayerAtTurn.getKey(), PlayerAtTurn.getValue()+tr.getPoints());

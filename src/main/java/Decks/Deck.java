@@ -23,7 +23,7 @@ public final class Deck {
             this.deck.add(new BonusCard(600));
             for (int j = 0; j < 2; j++) {
                 this.deck.add(new StopCard());
-            }
+           }
         }
         shuffle();
     }
