@@ -1,11 +1,8 @@
 package Turns;
-
-import DiePackage.Die;
 import TurnResults.TurnResult;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Scanner;
 
 public final class FireworkTurn extends AbstractTurn{
 
@@ -20,12 +17,12 @@ public final class FireworkTurn extends AbstractTurn{
     }
 
     @Override
-    void tuttoPoints(TurnResult tr) {
-        return;
+    protected void tuttoPoints(TurnResult tr) {
+        tr.setFirework(true);
     }
 
     @Override
-    boolean selectTriplets() {
+    protected boolean selectTriplets() {
         boolean selected = false;
 
         while (!selected) {
@@ -34,8 +31,9 @@ public final class FireworkTurn extends AbstractTurn{
 
             if (!triplets.isEmpty()) {
                 for (int value : triplets){
-                    dice.selectTripleDice(value);
-                    System.out.println("You rolled a triplet of " + String.valueOf(value) + "s!\n");
+                    this.dice.selectTripleDice(value);
+                    System.out.println("You rolled a triplet of " + value + "s!\n");
+                    delay(2000);
                     if (value == 1){this.tempPoints += 1000;}
                     else {this.tempPoints += value*100;}
                     selected = true;
@@ -47,27 +45,18 @@ public final class FireworkTurn extends AbstractTurn{
    }
 
     @Override
-    boolean selectSingles(int value, int points) {
+    protected boolean selectSingles(int value, int points) {
         boolean selected = false;
         HashMap<Integer, Integer> occurrences = populateHashmap(this.dice);
         if (occurrences.containsKey(value)) {
             tempPoints += occurrences.get(value)*points;
             for (int i=0; i < occurrences.get(value); i++){
-                for (Die d : dice){
-                    if (!d.isSelected() && d.getValue() == value){
-                        d.select();
-                        selected = true;
-                        break;
-                    }
+                selected = dice.selectSingleDice(value);
                 }
+            System.out.println("You rolled " + occurrences.get(value) + " x " + value + "s!\n");
             }
-            System.out.println("You rolled " + occurrences.get(value) + " x " + value + "s!");
-        }
-        return selected;
-    }
 
-    @Override
-    protected boolean rollAgain() {
-        return true;
+            delay(2000);
+        return selected;
     }
 }

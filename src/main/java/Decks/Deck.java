@@ -1,7 +1,9 @@
 package Decks;
+
 import Cards.*;
-import java.util.Collections;
+
 import java.util.ArrayList;
+import java.util.Collections;
 
 public final class Deck {
     private ArrayList<AbstractCard> deck = new ArrayList<>(56);
@@ -21,16 +23,16 @@ public final class Deck {
             this.deck.add(new BonusCard(600));
             for (int j = 0; j < 2; j++) {
                 this.deck.add(new StopCard());
-            }
+           }
         }
         shuffle();
     }
 
-    public void shuffle() {
+    private void shuffle() {
         Collections.shuffle(this.deck);
     }
 
-    public boolean isEmpty() {
+    private boolean isEmpty() {
         return this.deck.size() == 0;
     }
 
@@ -42,7 +44,11 @@ public final class Deck {
         }
         AbstractCard card = this.deck.remove(0);
         this.drawnCards.add(card);
-        System.out.println("||A " + card.getClass().getSimpleName() + " was drawn||\n");
+        if (card instanceof BonusCard) {
+            int b = ((BonusCard) card).bonus;
+            System.out.println("\n||A " + card.getClass().getSimpleName() + " (" + b + ") was drawn||\n");
+        }
+        else {System.out.println("\n||A " + card.getClass().getSimpleName() + " was drawn||\n");}
         return card;
     }
 }

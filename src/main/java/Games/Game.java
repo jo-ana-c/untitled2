@@ -1,95 +1,116 @@
 package Games;
-import Referees.Referee;
+import Cards.AbstractCard;
+import Decks.Deck;
+import Inputs.Input;
+import Decisions.Decision;
+import TurnResults.TurnResult;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Scanner;
+import java.util.Collections;
+import java.util.Map;
+import java.util.TreeMap;
 
 
-public final class Game {
-    final private int numPlayers;
-    final private ArrayList<String> names;
-    final private int maxPoints;
-    private Referee referee;
+public class Game {
+    //private final int numPlayers;
+    private final int maxPoints;
+
+    private final TreeMap<String, Integer> players = new TreeMap<>();
+
+    public Input inputObject = new Input();
+
+    //private final Decision decision = new Decision();
+
+    private final Deck deck = new Deck();
 
     public Game() {
-        System.out.println("Let's play Tutto!");
-        this.numPlayers = setNumPlayers();
-        this.names = new ArrayList<>(this.numPlayers);
-        this.maxPoints = setMaxScore();
-        setPlayers();
-        this.referee = new Referee(this.maxPoints, this.names);
-    }
-
-    private static boolean validation(String c, ArrayList<String> array) {
-        for (String x : array) {
-            if (x.equals(c)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    private int setNumPlayers() {
-        ArrayList<String> validInput = new ArrayList<>(Arrays.asList("2", "3", "4"));
-        Scanner scannerNumPlayers = new Scanner(System.in);
+        System.out.println("LET'S PLAY A GAME OF TUTTO!\n");
         System.out.println("How many Players (2-4) are playing? ");
-        String numPlayersInput = scannerNumPlayers.nextLine();
-        if(validation(numPlayersInput, validInput)) {
-            return Integer.parseInt(numPlayersInput);
-        }
-        else {
-            System.out.println("Input must be a single digit between 2 and 4.");
-            return setNumPlayers();
-        }
-        /*Scanner scannerNumPlayers = new Scanner(System.in);
-        System.out.println("How many Players (2-4) are playing? ");
-
-        int numPlayersInput;
-        do {
-            try {
-                numPlayersInput = scannerNumPlayers.nextInt();
-
-                while (numPlayersInput < 2 || numPlayersInput > 4) {
-                    System.out.println("Input must be a single digit between 2 and 4!");
-                    scannerNumPlayers.nextInt();
-                }
-                return numPlayersInput;}
-            catch (InputMismatchException err) {
-                System.out.println("Wrong input format!");
-                return setNumPlayers();
-            }
-        } while (!scannerNumPlayers.hasNextInt()); */
-    }
-
-    private int setMaxScore() {
-        Scanner scannerScore = new Scanner(System.in);
+        int numPlayers = inputObject.inputValidation_NumPlayer(inputObject.askIntegerInput());
         System.out.println("What is your maximum Score?");
-        int maxScoreInput;
-        do {
-            System.out.println("Maximum score must be between 1000 and 10000.");
-            while (!scannerScore.hasNextInt()) {
-                System.out.println("Invalid Input!");
-                scannerScore.next();
-            }
-            maxScoreInput = scannerScore.nextInt();
-        } while (maxScoreInput < 1000 || maxScoreInput > 10000);
-        return maxScoreInput;
-    }
-
-    private void setPlayers() {
-        Scanner scannerPlayers = new Scanner(System.in);
-        for (int i = 0; i < this.numPlayers; i++) {
+        this.maxPoints = inputObject.inputValidation_MaxScore(inputObject.askIntegerInput());
+        for (int i = 0; i < numPlayers; i++) {
             System.out.println("Please enter username of player " + (i+1) + ":");
-            String nameInput = scannerPlayers.next();
-
-            while (validation(nameInput, this.names)) {
-
-                System.out.println("Username taken! Please choose another one.");
-                nameInput = scannerPlayers.next();
-            }
-            this.names.add(nameInput);
-        }
-
+            String nameInput = inputObject.inputValidation_Players(inputObject.askStringInput(), this.players);
+            this.players.put(nameInput,0);}
+        gameFlow();
     }
+    private void gameFlow(){
+        while(onGoing()) {
+
+            for (Map.Entry<String, Integer> PlayerAtTurn: players.entrySet()){
+                System.out.println("\n******************* It's " + PlayerAtTurn.getKey() + "'s turn! *******************\n");
+                while(Decision.askRollOrDisplay()) {displayPoints();}
+                TurnResult tr = new TurnResult();
+                // While player is playing, reaching tutto and drawing a new card
+
+                while(true){
+                    AbstractCard drawnCard = deck.draw();
+                    tr = drawnCard.initTurn(tr);
+                    if (!tr.getNewCard()){break;}
+                    else if (tr.getCloverleaf() != 2 && Decision.askEndTurn()) {break;}
+                }
+                // if Cloverleaf and 2xTutto = Game finished and player won
+                if(tr.cloverleafWon()){
+                    //declareWinner(PlayerAtTurn.getKey());
+                    PlayerAtTurn.setValue(this.maxPoints);
+                    //break;
+                }
+
+                // if plusminus was drawn and player at turn is not leading, apply minus rule to leading players
+                if (tr.getPlusMinus() > 0) {
+                    for (String player : getLeadingPlayers()) {
+                        if (!player.equals(PlayerAtTurn.getKey())) {
+                            players.put(player, players.get(player)-(tr.getPlusMinus()*1000));
+                        }
+                    }
+                    players.put(PlayerAtTurn.getKey(), players.get(PlayerAtTurn.getKey())+(tr.getPlusMinus()*1000));
+                }
+                // receive points reached with other cards
+                players.put(PlayerAtTurn.getKey(), PlayerAtTurn.getValue()+tr.getPoints());
+                if (!onGoing()){
+                    declareWinner(PlayerAtTurn.getKey());
+                    break;
+                }
+
+            }
+
+        }
+    }
+
+    private boolean onGoing(){
+        return (Collections.max(players.values()) < this.maxPoints);
+    }
+
+    protected ArrayList<String> getLeadingPlayers(){
+
+        // get maxScore
+        int max = (Collections.max(players.values()));
+
+        // Iterate through TreeMap
+        ArrayList<String> leadingPlayers = new ArrayList<>();
+
+        // add players with maxScore to arraylist
+        for (Map.Entry<String, Integer> Entry: players.entrySet()){
+            if (Entry.getValue() == max) {
+                leadingPlayers.add(Entry.getKey());
+            }
+        }
+        return leadingPlayers;
+    }
+
+    private void declareWinner(String winner){
+        System.out.println(winner + " won the game!");
+        displayPoints();
+    }
+
+    private void displayPoints(){
+        System.out.println("SCOREBOARD");
+        for (Map.Entry<String, Integer> FinalPoints: players.entrySet()){
+            System.out.print(FinalPoints.getKey() + ": " + FinalPoints.getValue() + " points" );
+            System.out.println();
+        }
+    }
+
+
 }

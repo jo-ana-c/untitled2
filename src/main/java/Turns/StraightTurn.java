@@ -1,10 +1,9 @@
 package Turns;
-import java.util.ArrayList;
-import java.util.Scanner;
 
-import DicePackage.*;
-import DiePackage.*;
+import DiePackage.Die;
 import TurnResults.TurnResult;
+
+import java.util.ArrayList;
 
 public final class StraightTurn extends AbstractTurn {
 
@@ -29,22 +28,21 @@ public final class StraightTurn extends AbstractTurn {
                 return false;
             }
         }
+        System.out.println("NULL!\n");
         return true;
     }
 
     @Override
-    void tuttoPoints(TurnResult tr) {
+    protected void tuttoPoints(TurnResult tr) {
         tr.setPoints(tr.getPoints() + 2000);
+        tr.setNewCard(true);
     }
 
     @Override
-    void selectDice() {
-        //ArrayList<Integer> possibleDice = new ArrayList<>();
+    protected void selectDice() {
         ArrayList<Integer> selectedDice = new ArrayList<>();
 
         boolean anyDiceSelected = false;
-
-        Scanner sc = new Scanner(System.in);
 
         while (!anyDiceSelected) {
 
@@ -52,14 +50,12 @@ public final class StraightTurn extends AbstractTurn {
                 if (d.isSelected()) {
                     selectedDice.add(d.getValue());
                 }
-                else if (!selectedDice.contains(d.getValue())) {
+            }
+            for (Die d : dice) {
+                if (!selectedDice.contains(d.getValue())) {
                     System.out.println("Do you want to select the die with value " + d.getValue() + "?\nEnter Y for yes or N for no:");
-                    String input = sc.next();
-                    while (!(input.equals("Y") || input.equals("N"))) {
-                        System.out.println("Invalid input! Enter Y for yes or N for no: \n");
-                        input = sc.next();
-                    }
-                    if (input.equals("Y")){
+                    String input = inputObject.inputValidation_YN(inputObject.askStringInput());
+                    if (input.equals("Y")) {
                         d.select();
                         selectedDice.add(d.getValue());
                         anyDiceSelected = true;
@@ -67,10 +63,5 @@ public final class StraightTurn extends AbstractTurn {
                 }
             }
         }
-    }
-
-    @Override
-    protected boolean rollAgain() {
-        return true;
     }
 }

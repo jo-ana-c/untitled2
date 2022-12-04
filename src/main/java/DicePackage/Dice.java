@@ -1,16 +1,18 @@
 package DicePackage;
-import java.util.ArrayList;
+
 import DiePackage.Die;
-import java.util.*;
-import java.lang.Iterable;
+
+import java.util.ArrayList;
+import java.util.Iterator;
 
 public final class Dice implements Iterable<Die>{
-    private ArrayList<Die> dice = new ArrayList<>(6);
+    private final ArrayList<Die> dice = new ArrayList<>(6);
     public Dice() {
         for (int i = 0; i < 6; i++) {
             this.dice.add(new Die());
         }
     }
+
     @Override
     public Iterator<Die> iterator(){
         Iterator<Die> iter = new Iterator(){
@@ -28,12 +30,10 @@ public final class Dice implements Iterable<Die>{
         return iter;
     }
 
-    public Dice rollDice() {
+    public void rollDice() {
         for (Die d : dice) {
             if (! d.isSelected()) {d.rollDie();}
         }
-        //not sure if we need to return it
-        return this;
     }
 
     public void displayDice(){
@@ -69,17 +69,22 @@ public final class Dice implements Iterable<Die>{
         System.out.println();
     }
 
-    public void selectSingleDice(int value){
+    public boolean selectSingleDice(int value){
         for (Die d : dice) {
-            if (d.getValue() == value) {d.select();break;}
+            if (d.getValue() == value && !d.isSelected()) {
+                d.select();
+                return true;
+            }
         }
+        return false;
     }
 
     public void selectTripleDice(int value){
         int counter = 0;
-        for (Die d : dice) {
-            if (d.getValue() == value) {
-                d.select(); counter += 1;
+        for (Die d : this.dice) {
+            if (!d.isSelected() && d.getValue() == value) {
+                d.select();
+                counter += 1;
                 if (counter == 3){break;}
             }
         }
